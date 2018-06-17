@@ -1,0 +1,30 @@
+# First load the data: 
+
+sh ranking_clarification_questions/src/models/run_load_data.sh
+
+# -----------------------------------------------------------------------------------
+
+# Run different neural baselines:
+
+# Neural(p,q)
+
+1. Set "MODEL=baseline_pq" in ranking_clarification_questions/src/models/run_main.sh
+2. sh ranking_clarification_questions/src/models/run_main.sh
+
+# Neural(p,a)
+
+1. Set "MODEL=baseline_pa" in ranking_clarification_questions/src/models/run_main.sh
+2. sh ranking_clarification_questions/src/models/run_main.sh
+
+# Neural(p,q,a)
+
+1. Set "MODEL=baseline_pqa" in ranking_clarification_questions/src/models/run_main.sh
+2. sh ranking_clarification_questions/src/models/run_main.sh
+
+# -----------------------------------------------------------------------------------
+
+# Run EVPI model
+
+1. Set "MODEL=evpi" in ranking_clarification_questions/src/models/run_main.sh
+2. sh ranking_clarification_questions/src/models/run_main.sh
+
