@@ -1,3 +1,8 @@
+# Prerequisites
+#
+# Install lasagne: http://lasagne.readthedocs.io/en/latest/user/installation.html
+# Install numpy, scipy
+
 # First load the data: 
 
 sh ranking_clarification_questions/src/models/run_load_data.sh
