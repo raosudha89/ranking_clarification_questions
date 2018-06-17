@@ -1,0 +1,11 @@
+Steps to train a GLoVE (https://nlp.stanford.edu/projects/glove/) word embedding model on stackexchange datadump
+
+NOTE: Word embeddings pretrained on stackexchange datadump (version year 2017) can be found in this repo: ranking_clarification_questions/embeddings/word_embeddings.p 
+Follow the steps below only if you wish to retrain the embeddings. 
+
+1. Download all domains of stackexchange from: https://archive.org/download/stackexchange
+2. Extract text from all Posts.xml, Comments.xml and PostHistory.xml
+3. Save the combined data under: stackexchange/stackexchange_datadump.txt
+4. Download and compile GLoVE code from: https://nlp.stanford.edu/projects/glove/
+5. Run ranking_clarification_questions/src/embedding_generation/run_glove.sh
+6. Run ranking_clarification_questions/src/embedding_generation/run_create_we_vocab.sh
