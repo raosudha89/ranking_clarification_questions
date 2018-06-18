@@ -14,7 +14,7 @@ cd ranking_clarification_questions; sh src/models/run_load_data.sh
 # Neural(p,q)
 
 1. Set "MODEL=baseline_pq" in ranking_clarification_questions/src/models/run_main.sh
-2. sh ranking_clarification_questions/src/models/run_main.sh
+2. cd ranking_clarification_questions; sh src/models/run_main.sh
 
 # Neural(p,a)
 
