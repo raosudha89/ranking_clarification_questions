@@ -1,6 +1,7 @@
 import argparse
 import csv
 import sys
+import cPickle as p
 
 def read_data(post_data_tsv, qa_data_tsv):
 	posts = {}

@@ -7,5 +7,5 @@ Follow the steps below only if you wish to retrain the embeddings.
 2. Extract text from all Posts.xml, Comments.xml and PostHistory.xml
 3. Save the combined data under: stackexchange/stackexchange_datadump.txt
 4. Download and compile GLoVE code from: https://nlp.stanford.edu/projects/glove/
-5. Run ranking_clarification_questions/src/embedding_generation/run_glove.sh
-6. Run ranking_clarification_questions/src/embedding_generation/run_create_we_vocab.sh
+5. cd ranking_clarification_questions; sh src/embedding_generation/run_glove.sh
+6. cd ranking_clarification_questions; sh src/embedding_generation/run_create_we_vocab.sh
