@@ -5,11 +5,25 @@
 
 # First load the data: 
 
-cd ranking_clarification_questions; sh src/models/run_load_data.sh
+# Load data from askubuntu.com
+1. Set "SITE_NAME=askubuntu.com" in ranking_clarification_questions/src/models/run_load_data.sh 
+2. cd ranking_clarification_questions; sh src/models/run_load_data.sh
+
+# Load data from unix.stackexchange.com
+1. Set "SITE_NAME=unix.stackexchange.com" in ranking_clarification_questions/src/models/run_load_data.sh 
+2. cd ranking_clarification_questions; sh src/models/run_load_data.sh
+
+# Load data from superuser.com
+1. Set "SITE_NAME=superuser.com" in ranking_clarification_questions/src/models/run_load_data.sh 
+2. cd ranking_clarification_questions; sh src/models/run_load_data.sh
+
+# Combine data from three domains
+
+1. cd ranking_clarification_questions; sh src/models/run_combine_domains.sh
 
 # -----------------------------------------------------------------------------------
 
-# Run different neural baselines:
+# Run different neural baselines on the combined data:
 
 # Neural(p,q)
 
@@ -28,7 +42,7 @@ cd ranking_clarification_questions; sh src/models/run_load_data.sh
 
 # -----------------------------------------------------------------------------------
 
-# Run EVPI model
+# Run EVPI model on the combined data:
 
 1. Set "MODEL=evpi" in ranking_clarification_questions/src/models/run_main.sh
 2. cd ranking_clarification_questions; sh src/models/run_main.sh
