@@ -4,8 +4,7 @@
 
 # NOTE
 
-Data for the sites: askubuntu.com, unix.stackexchange.com & superuser.com is already included in this repo
-The original Stack Exchange data dump used to generate this dataset can be found here: https://archive.org/download/stackexchange
+* Data for the sites: askubuntu.com, unix.stackexchange.com & superuser.com can be found here: https://go.umd.edu/clarification_questions_dataset 
 
 # Steps to generate data for any other site
 
