@@ -9,10 +9,10 @@ To appear in the proceedings of The 2018 Association of Computational Lingusitic
 
 # Downloading data
 
-* Download the clarification questions dataset from google drive here: https://go.umd.edu/clarification_questions_dataset <br/>
-* cp clarification_questions_dataset/data to ranking_clarification_questions/data
+* Download the clarification questions dataset from google drive here: https://go.umd.edu/clarification_questions_dataset
+* cp clarification_questions_dataset/data ranking_clarification_questions/data
 
-* Download word embeddings trained on stackexchange datadump here: https://go.umd.edu/stackexchange_embeddings <br/>
+* Download word embeddings trained on stackexchange datadump here: https://go.umd.edu/stackexchange_embeddings
 * cp stackexchange_embeddings/embeddings ranking_clarification_questions/embeddings
 
 The above dataset contains clarification questions for these three sites of stackexchange: <br/>
@@ -28,7 +28,7 @@ To run models on a combination of the three sites above, check ranking_clarifica
 
 To generate clarification questions for a different site of stackexchange, check ranking_clarification_questions/src/data_generation/README
 
-# 
+# Retrain stackexchange word embeddings 
 
 To retrain word embeddings on a newer version of stackexchange datadump, check ranking_clarification_questions/src/embedding_generation/README
 
