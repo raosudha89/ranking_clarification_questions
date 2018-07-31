@@ -2,6 +2,17 @@ import argparse
 import csv
 import sys
 import cPickle as p
+import numpy as np
+
+def get_indices(tokens, vocab):
+    indices = np.zeros([len(tokens)], dtype=np.int32)
+    UNK = "<unk>"
+    for i, w in enumerate(tokens):
+        try:
+            indices[i] = vocab[w]
+        except:
+            indices[i] = vocab[UNK]
+    return indices
 
 def read_data(post_data_tsv, qa_data_tsv):
 	posts = {}
