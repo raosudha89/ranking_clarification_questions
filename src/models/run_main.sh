@@ -14,7 +14,7 @@ SCRIPTS_DIR=src/models
 #MODEL=baseline_pqa
 MODEL=evpi
 
-mkdir $OUTPUT_DIR
+mkdir -p $OUTPUT_DIR
 
 THEANO_FLAGS=floatX=float32,device=gpu python $SCRIPTS_DIR/main.py \
                                                 --post_ids_train $DATA_DIR/$SITE_NAME/post_ids_train.p \

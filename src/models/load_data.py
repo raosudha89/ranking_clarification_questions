@@ -1,5 +1,6 @@
 import argparse
 import csv
+import os
 import sys
 import cPickle as p
 import numpy as np
@@ -20,13 +21,13 @@ def read_data(post_data_tsv, qa_data_tsv):
 	ques_lists = {}
 	ans_lists = {}
 	with open(post_data_tsv, 'rb') as tsvfile:
-		tsv_reader = csv.reader(tsvfile, delimiter='\t')
+		tsv_reader = csv.DictReader(tsvfile, delimiter='\t')
 		for row in tsv_reader:
 			post_id = row['postid']
 			titles[post_id] = row['title']
 			posts[post_id] = row['post']
 	with open(qa_data_tsv, 'rb') as tsvfile:
-		tsv_reader = csv.reader(tsvfile, delimiter='\t')
+		tsv_reader = csv.DictReader(tsvfile, delimiter='\t')
 		for row in tsv_reader:
 			post_id = row['postid']
 			ques_lists[post_id] = [row['q1'], row['q2'], row['q3'], row['q4'], row['q5'], row['q6'], row['q7'], row['q8'], row['q9'], row['q10']]
@@ -34,7 +35,7 @@ def read_data(post_data_tsv, qa_data_tsv):
 	return posts, titles, ques_lists, ans_lists
 
 def read_ids(ids_file):	
-	ids = [curr_id.strip('\n') for curr_id in open(ids_file, 'r').readlines().split()]
+	ids = [curr_id.strip('\n') for curr_id in open(ids_file, 'r').readlines()]
 	return ids
 
 def generate_neural_vectors(posts, titles, ques_lists, ans_lists, post_ids, vocab, N, split):

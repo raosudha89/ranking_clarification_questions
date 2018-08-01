@@ -34,12 +34,13 @@ def generate_data(posts, ques_list, ans_list, args):
 	for i in range(data_size):
 		data_posts[i], data_post_masks[i] = get_data_masks(posts[i], args.post_max_len)
 		for j in range(N):
-			data_ques_list[i][j], data_ques_masks_list[i][j] = get_data_masks(ques_list[i][j][0], args.ques_max_len)
-			data_ans_list[i][j], data_ans_masks_list[i][j] = get_data_masks(ans_list[i][j][0], args.ans_max_len)
+			data_ques_list[i][j], data_ques_masks_list[i][j] = get_data_masks(ques_list[i][j], args.ques_max_len)
+			data_ans_list[i][j], data_ans_masks_list[i][j] = get_data_masks(ans_list[i][j], args.ans_max_len)
 
 	return [data_posts, data_post_masks, data_ques_list, data_ques_masks_list, data_ans_list, data_ans_masks_list]	
 
-def iterate_minibatches(posts, post_masks, ques_list, ques_masks_list, ans_list, ans_masks_list, post_ids, batch_size, shuffle=False):
+def iterate_minibatches(posts, post_masks, ques_list, ques_masks_list, ans_list, ans_masks_list, \
+						labels, ranks, post_ids, batch_size, shuffle=False):
 	if shuffle:
 		indices = np.arange(posts.shape[0])
 		np.random.shuffle(indices)
@@ -48,7 +49,8 @@ def iterate_minibatches(posts, post_masks, ques_list, ques_masks_list, ans_list,
 			excerpt = indices[start_idx:start_idx + batch_size]
 		else:
 			excerpt = slice(start_idx, start_idx + batch_size)
-		yield posts[excerpt], post_masks[excerpt], ques_list[excerpt], ques_masks_list[excerpt], ans_list[excerpt], ans_masks_list[excerpt], post_ids[excerpt]
+		yield posts[excerpt], post_masks[excerpt], ques_list[excerpt], ques_masks_list[excerpt], \
+				ans_list[excerpt], ans_masks_list[excerpt], labels[excerpt], ranks[excerpt], post_ids[excerpt]
 
 def get_rank(preds, labels):
 	preds = np.array(preds)
@@ -80,7 +82,7 @@ def shuffle(q, qm, a, am, l, r):
 	return shuffled_q, shuffled_qm, shuffled_a, shuffled_am, shuffled_l, shuffled_r
 
 
-def write_test_predictions(out_file, postId, utilities, ranks):
+def write_test_predictions(out_file, postId, utilities, ranks, epoch):
 	lstring = "[%s]: " % (postId)
 	N = len(utilities)
 	scores = [0]*N
@@ -88,7 +90,7 @@ def write_test_predictions(out_file, postId, utilities, ranks):
 		scores[ranks[i]] = utilities[i]
 	for i in range(N):
 		lstring += "%f " % (scores[i])
-	out_file_o = open(out_file, 'a')
+	out_file_o = open(out_file+'.epoch%d' % epoch, 'a')
 	out_file_o.write(lstring + '\n')
 	out_file_o.close()
 

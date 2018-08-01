@@ -24,8 +24,8 @@ def build(word_embeddings, len_voc, word_emb_dim, args, freeze=False):
 
 	post_out, post_lstm_params = build_lstm(posts, post_masks, args.post_max_len, \
 												  word_embeddings, word_emb_dim, args.hidden_dim, len_voc, args.batch_size)	
-	ques_out, ques_lstm_params = build_list_lstm(ques_list, ques_masks_list, N, args.ques_max_len, \
-											word_embeddings, word_emb_dim, args.hidden_dim, len_voc, args.batch_size)
+	ques_out, ques_emb_out, ques_lstm_params = build_list_lstm(ques_list, ques_masks_list, N, args.ques_max_len, \
+													word_embeddings, word_emb_dim, args.hidden_dim, len_voc, args.batch_size)
 	
 	pq_preds = [None]*N
 	post_ques = T.concatenate([post_out, ques_out[0]], axis=1)
@@ -64,7 +64,7 @@ def build(word_embeddings, len_voc, word_emb_dim, args, freeze=False):
 	post_ques_dense_params = lasagne.layers.get_all_params(l_post_ques_dense, trainable=True)
 
 	all_params = post_lstm_params + ques_lstm_params + post_ques_dense_params
-	print 'Params in concat ', lasagne.layers.count_params(l_post_ques_dense)
+	#print 'Params in concat ', lasagne.layers.count_params(l_post_ques_dense)
 	loss += args.rho * sum(T.sum(l ** 2) for l in all_params)
 
 	updates = lasagne.updates.adam(loss, all_params, learning_rate=args.learning_rate)
@@ -87,18 +87,19 @@ def validate(val_fn, fold_name, epoch, fold, args, out_file=None):
 	recall = [0]*N
 	
 	if out_file:
-		out_file_o = open(out_file, 'a')
-		out_file_o.write("\nEpoch: %d\n" % epoch)
+		out_file_o = open(out_file+'.epoch%d' % epoch, 'w')
 		out_file_o.close()
 	posts, post_masks, ques_list, ques_masks_list, ans_list, ans_masks_list, post_ids = fold
-	for p, pm, q, qm, a, am, ids in iterate_minibatches(posts, post_masks, ques_list, ques_masks_list,	\
-														ans_list, ans_masks_list, post_ids, args.batch_size, shuffle=False):
-		l = np.zeros((args.batch_size, N), dtype=np.int32)
-		r = np.zeros((args.batch_size, N), dtype=np.int32)
-		l[:,0] = 1
-		for j in range(N):
-			r[:,j] = j
-		q, qm, a, am, l, r = shuffle(q, qm, a, am, l, r)
+	labels = np.zeros((len(post_ids), N), dtype=np.int32)
+	ranks = np.zeros((len(post_ids), N), dtype=np.int32)
+	labels[:,0] = 1
+	for j in range(N):
+		ranks[:,j] = j
+	ques_list, ques_masks_list, ans_list, ans_masks_list, labels, ranks = shuffle(ques_list, ques_masks_list, \
+																					ans_list, ans_masks_list, labels, ranks)
+	for p, pm, q, qm, a, am, l, r, ids in iterate_minibatches(posts, post_masks, ques_list, ques_masks_list, \
+																ans_list, ans_masks_list, labels, ranks, \
+														 		post_ids, args.batch_size, shuffle=False):
 		q = np.transpose(q, (1, 0, 2))
 		qm = np.transpose(qm, (1, 0, 2))
 		
@@ -121,7 +122,7 @@ def validate(val_fn, fold_name, epoch, fold, args, out_file=None):
 					recall[index] += 1
 			total += 1
 			if out_file:
-				write_test_predictions(out_file, ids[j], preds, r[j])
+				write_test_predictions(out_file, ids[j], preds, r[j], epoch)
 		num_batches += 1
 
 	lstring = '%s: epoch:%d, cost:%f, acc:%f, mrr:%f,time:%d' % \

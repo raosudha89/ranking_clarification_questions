@@ -42,7 +42,7 @@ def build_list_lstm(content_list, content_masks_list, N, max_len, word_embedding
 		emb_out[i] = T.mean(emb_out[i] * content_masks_list[i][:,:,None], axis=1)
 	l_emb.params[l_emb.W].remove('trainable')
 	params = lasagne.layers.get_all_params(l_lstm, trainable=True)
-	print 'Params in lstm: ', (lasagne.layers.count_params(l_lstm)-lasagne.layers.count_params(l_emb))
+	#print 'Params in lstm: ', (lasagne.layers.count_params(l_lstm)-lasagne.layers.count_params(l_emb))
 	return out, emb_out, params
 
 def build_lstm(posts, post_masks, max_len, word_embeddings, word_emb_dim, hidden_dim, len_voc, batch_size):
@@ -55,6 +55,6 @@ def build_lstm(posts, post_masks, max_len, word_embeddings, word_emb_dim, hidden
 	out = T.mean(out * post_masks[:,:,None], axis=1)
 	l_emb.params[l_emb.W].remove('trainable')
 	params = lasagne.layers.get_all_params(l_lstm, trainable=True)
-	print 'Params in post_lstm: ', (lasagne.layers.count_params(l_lstm)-lasagne.layers.count_params(l_emb))
+	#print 'Params in post_lstm: ', (lasagne.layers.count_params(l_lstm)-lasagne.layers.count_params(l_emb))
 	return out, params
 

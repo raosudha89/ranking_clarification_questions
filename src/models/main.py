@@ -82,6 +82,7 @@ if __name__ == '__main__':
 	argparser.add_argument("--ques_max_len", type = int, default = 40)
 	argparser.add_argument("--ans_max_len", type = int, default = 40)
 	argparser.add_argument("--test_predictions_output", type = str)
+	argparser.add_argument("--stdout_file", type = str)
 	argparser.add_argument("--model", type = str)
 	args = argparser.parse_args()
 	print args

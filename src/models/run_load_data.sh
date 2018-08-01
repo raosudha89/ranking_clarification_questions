@@ -2,9 +2,9 @@
 
 DATA_DIR=data
 EMB_DIR=embeddings
-SITE_NAME=askubuntu.com
+#SITE_NAME=askubuntu.com
 #SITE_NAME=unix.stackexchange.com
-#SITE_NAME=superuser.com
+SITE_NAME=superuser.com
 
 SCRIPTS_DIR=src/models
 

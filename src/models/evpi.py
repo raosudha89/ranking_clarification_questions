@@ -42,7 +42,7 @@ def answer_model(post_out, ques_out, ques_emb_out, ans_out, ans_emb_out, labels,
 	l_post_ques_dense = lasagne.layers.DenseLayer(l_post_ques_denses[-1], num_units=1,\
 												nonlinearity=lasagne.nonlinearities.sigmoid)
 	post_ques_dense_params = lasagne.layers.get_all_params(l_post_ques_denses, trainable=True)		
-	print 'Params in post_ques ', lasagne.layers.count_params(l_post_ques_denses)
+	#print 'Params in post_ques ', lasagne.layers.count_params(l_post_ques_denses)
 	
 	for i in range(1, N):
 		post_ques = T.concatenate([post_out, ques_out[i]], axis=1)
@@ -66,7 +66,7 @@ def answer_model(post_out, ques_out, ques_emb_out, ans_out, ans_emb_out, labels,
 	for i in range(N):
 		for j in range(N):
 			ques_sim[i*N+j] = custom_sim_fn(ques_emb_out[i], ques_emb_out[j])
-			pq_a_squared_errors[i*N+j] = 1-cos_sim_fn(pq_out[i], ans_emb_out[j])
+			pq_a_squared_errors[i*N+j] = 1-cos_sim_fn(ques_emb_out[i], ans_emb_out[j])
 	
 	pq_a_loss = 0.0	
 	for i in range(N):
@@ -121,7 +121,7 @@ def utility_calculator(post_out, ques_out, ques_emb_out, ans_out, ques_sim, pq_a
 			pqa_preds[i*N+j] = lasagne.layers.get_output(l_post_ques_ans_dense_)
 		pqa_loss += T.mean(lasagne.objectives.binary_crossentropy(pqa_preds[i*N+i], labels[:,i]))
 	post_ques_ans_dense_params = lasagne.layers.get_all_params(l_post_ques_ans_dense, trainable=True)
-	print 'Params in post_ques_ans ', lasagne.layers.count_params(l_post_ques_ans_dense)
+	#print 'Params in post_ques_ans ', lasagne.layers.count_params(l_post_ques_ans_dense)
 
 	return pqa_loss, post_ques_ans_dense_params, pqa_preds
 
@@ -155,7 +155,7 @@ def build(word_embeddings, len_voc, word_emb_dim, args, freeze=False):
 	ans_out, ans_emb_out, ans_lstm_params = build_list_lstm(ans_list, ans_masks_list, N, args.ans_max_len, \
 											word_embeddings, word_emb_dim, args.hidden_dim, len_voc, args.batch_size)
 
-	pqa_loss, post_ques_ans_dense_params, pqa_preds = utility_calculator(post_out, ques_out, ques_emb_out, ans_out, \ 
+	pqa_loss, post_ques_ans_dense_params, pqa_preds = utility_calculator(post_out, ques_out, ques_emb_out, ans_out, \
 																			ques_sim, pq_a_squared_errors, labels, args)	
 
 	all_params += post_lstm_params + ques_lstm_params + ans_lstm_params
@@ -185,7 +185,7 @@ def validate(val_fn, fold_name, epoch, fold, args, out_file=None):
 	recall = [0]*N
 	
 	if out_file:
-		out_file_o = open(out_file+'.epoch%d' % epoch, 'a')
+		out_file_o = open(out_file+'.epoch%d' % epoch, 'w')
 		out_file_o.close()
 	posts, post_masks, ques_list, ques_masks_list, ans_list, ans_masks_list, post_ids = fold
 	labels = np.zeros((len(post_ids), N), dtype=np.int32)
@@ -193,9 +193,11 @@ def validate(val_fn, fold_name, epoch, fold, args, out_file=None):
 	labels[:,0] = 1
 	for j in range(N):
 		ranks[:,j] = j
-	ques_list, ques_masks_list, ans_list, ans_masks_list, labels, ranks = shuffle(ques_list, ques_masks_list, ans_list, ans_masks_list, labels, ranks)
-	for p, pm, q, qm, a, am, l, r, ids in iterate_minibatches(posts, post_masks, ques_list, ques_masks_list, ans_list, ans_masks_list, labels, ranks, \
-														 post_ids, args.batch_size, shuffle=False):
+	ques_list, ques_masks_list, ans_list, ans_masks_list, labels, ranks = shuffle(ques_list, ques_masks_list, \
+																					ans_list, ans_masks_list, labels, ranks)
+	for p, pm, q, qm, a, am, l, r, ids in iterate_minibatches(posts, post_masks, ques_list, ques_masks_list, \
+																ans_list, ans_masks_list, labels, ranks, \
+														 		post_ids, args.batch_size, shuffle=False):
 		q = np.transpose(q, (1, 0, 2))
 		qm = np.transpose(qm, (1, 0, 2))
 		a = np.transpose(a, (1, 0, 2))
