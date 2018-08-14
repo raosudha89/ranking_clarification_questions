@@ -16,6 +16,10 @@ MODEL=evpi
 
 mkdir -p $OUTPUT_DIR
 
+source /fs/clip-amr/gpu_virtualenv/bin/activate
+module add cuda/8.0.44
+module add cudnn/v5.1
+
 THEANO_FLAGS=floatX=float32,device=gpu python $SCRIPTS_DIR/main.py \
                                                 --post_ids_train $DATA_DIR/$SITE_NAME/post_ids_train.p \
                                                 --post_vectors_train $DATA_DIR/$SITE_NAME/post_vectors_train.p \
