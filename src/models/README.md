@@ -2,6 +2,12 @@
 
 * Install lasagne: http://lasagne.readthedocs.io/en/latest/user/installation.html
 * Install numpy, scipy
+* Version information:
+Python 2.7.5
+Theano 0.9.0dev5
+Lasagne 0.2.dev1
+Cuda 8.0.44
+Cudnn 5.1
 
 # Loading data 
 

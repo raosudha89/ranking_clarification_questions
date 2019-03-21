@@ -2,10 +2,10 @@
 
 This repository contains data and code for the paper below:
 
-<i><a href="https://arxiv.org/abs/1805.04655">
+<i><a href="http://aclweb.org/anthology/P18-1255">
 Learning to Ask Good Questions: Ranking Clarification Questions using Neural Expected Value of Perfect Information</a></i><br/>
 Sudha Rao (raosudha@cs.umd.edu) and Hal Daumé III (hal@umiacs.umd.edu)<br/>
-To appear in the proceedings of The 2018 Association of Computational Lingusitics (ACL 2018)
+Proceedings of The 2018 Association of Computational Lingusitics (ACL 2018)
 
 # Downloading data
 
